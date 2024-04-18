@@ -1,0 +1,30 @@
+
+
+GET https://newsapi.org/v2/everything?q=Apple&from=2024-03-22&sortBy=popularity&apiKey=API_KEY
+
+
+
+everything
+GET https://newsapi.org/v2/everything?q=bitcoin&apiKey=3935233245964f748dd3ec4594b5471c
+
+
+
+Top Headlines
+GET https://newsapi.org/v2/top-headlines?country=us&apiKey=3935233245964f748dd3ec4594b5471c
+
+Sources
+https://newsapi.org/v2/top-headlines/sources?from=2024-04-16&to=2024-04-16&sortBy=popularity&apiKey=3935233245964f748dd3ec4594b5471c
+
+
+
+dependencies used 
+1) http - to handle the requests of API
+2) Cache_network_storage - to avoid the loading time of images
+
+
+
+directories
+1) models-news models json format
+2) screens- different pages in flutter App
+3) repository- It will fetch the API data
+
