@@ -10,6 +10,7 @@ import 'package:test_2/models/categories_news_model.dart';
 import 'package:test_2/screen_model/news_screen_model.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:test_2/screens/adminpanel.dart';
 import 'package:test_2/screens/news_detail_screen.dart';
 
 class CategoriesScreen extends StatefulWidget {
@@ -52,9 +53,17 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     final height = MediaQuery.sizeOf(context).height * 1;
 
     return Scaffold(
+      
       appBar: AppBar(
-        title: Text('News Category', style: GoogleFonts.poppins(fontSize: 20 , fontWeight: FontWeight.w600),),
+        title: Text('News Category', style: GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.w600)),
         centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.account_circle),
+          onPressed: () {
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AdminPanel()));
+          },
+        ),
+        automaticallyImplyLeading: false,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
