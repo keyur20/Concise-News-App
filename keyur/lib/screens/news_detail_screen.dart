@@ -32,10 +32,7 @@ class NewsDetailScreen extends StatefulWidget {
 class _NewsDetailScreenState extends State<NewsDetailScreen> {
   final format = DateFormat('MMMM dd, yyyy');
 
-  bool _happySelected = false;
-  bool _sadSelected = false;
-  bool _angrySelected = false;
-  bool _likeSelected = false;
+  String? _selectedEmoji;
 
   @override
   Widget build(BuildContext context) {
@@ -123,23 +120,29 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
               ],
             ),
           ),
-          
           Positioned(
             bottom: 20.0,
             right: 20.0,
-            left: 20.0, // Add left padding to align with the right padding
+            left: 20.0,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween, // Space out children equally
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    // Show emoji selection
                     showModalBottomSheet<void>(
                       context: context,
+                      isDismissible: false,
                       builder: (BuildContext context) {
                         return EmojiSelection(
                           onEmojiSelected: (emoji) {
-                            // Handle selected emoji
+                            setState(() {
+                              _selectedEmoji = emoji;
+                            });
+                            Future.delayed(Duration(seconds: 1), () {
+                              setState(() {
+                                _selectedEmoji = null;
+                              });
+                            });
                           },
                         );
                       },
@@ -170,6 +173,22 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
               ],
             ),
           ),
+          if (_selectedEmoji != null)
+            Positioned(
+              bottom: 110.0,
+              right: 80.0,
+              child: AnimatedOpacity(
+                opacity: _selectedEmoji != null ? 1.0 : 0.0,
+                duration: Duration(milliseconds: 500),
+                child: Text(
+                  _selectedEmoji ?? '',
+                  style: TextStyle(
+                    fontSize: 30,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
     );
@@ -179,7 +198,8 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
 class EmojiSelection extends StatelessWidget {
   final void Function(String) onEmojiSelected;
 
-  const EmojiSelection({Key? key, required this.onEmojiSelected}) : super(key: key);
+  const EmojiSelection({Key? key, required this.onEmojiSelected})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -212,28 +232,40 @@ class EmojiSelection extends StatelessWidget {
                   Navigator.of(context).pop();
                   onEmojiSelected("😊");
                 },
-                child: Text("😊", style: TextStyle(fontSize: 30)),
+                child: Opacity(
+                  opacity: 0.5,
+                  child: Text("😊", style: TextStyle(fontSize: 30)),
+                ),
               ),
               GestureDetector(
                 onTap: () {
                   Navigator.of(context).pop();
                   onEmojiSelected("😔");
                 },
-                child: Text("😔", style: TextStyle(fontSize: 30)),
+                child: Opacity(
+                  opacity: 0.5,
+                  child: Text("😔", style: TextStyle(fontSize: 30)),
+                ),
               ),
               GestureDetector(
                 onTap: () {
                   Navigator.of(context).pop();
                   onEmojiSelected("😠");
                 },
-                child: Text("😠", style: TextStyle(fontSize: 30)),
+                child: Opacity(
+                  opacity: 0.5,
+                  child: Text("😠", style: TextStyle(fontSize: 30)),
+                ),
               ),
               GestureDetector(
                 onTap: () {
                   Navigator.of(context).pop();
                   onEmojiSelected("👍");
                 },
-                child: Text("👍", style: TextStyle(fontSize: 30)),
+                child: Opacity(
+                  opacity: 0.5,
+                  child: Text("👍", style: TextStyle(fontSize: 30)),
+                ),
               ),
             ],
           ),
