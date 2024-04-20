@@ -328,26 +328,31 @@ class _HomeScreenState extends State<HomeScreen> {
                                           
                                           children: [
                                             
-                                            Text(snapshot.data!.articles![index].title.toString(),
-                                              maxLines: 4,
-                                              style: GoogleFonts.poppins(
-                                                fontSize: 15,
-                                                color: Colors.black54,
-                                                fontWeight: FontWeight.w700
-                                              ),
-                                            ),
+                                            Text(
+  snapshot.data!.articles![index].title.toString(),
+  maxLines: 3,
+  overflow: TextOverflow.ellipsis,
+  style: GoogleFonts.poppins(
+    fontSize: 15,
+    fontWeight: FontWeight.w700,
+    color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
+  ),
+),
+
                                             Spacer(),
                                             Row(
                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
-                                                Text(snapshot.data!.articles![index].source!.name.toString(),
-                                                  maxLines: 3,
-                                                  style: GoogleFonts.poppins(
-                                                    fontSize: 12,
-                                                    color: Colors.black54,
-                                                    fontWeight: FontWeight.w600
-                                                  ),
-                                                ),
+                                                Text(
+  snapshot.data!.articles![index].source!.name.toString(),
+  maxLines: 3,
+  style: GoogleFonts.poppins(
+    fontSize: 12,
+    color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black54,
+    fontWeight: FontWeight.w600,
+  ),
+),
+
                                                 Text(format.format(dateTime),
                                                   
                                                   style: GoogleFonts.poppins(
