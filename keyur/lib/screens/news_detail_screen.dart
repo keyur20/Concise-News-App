@@ -204,7 +204,8 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
   void _shareOnWhatsApp() async {
     String title = Uri.encodeComponent(widget.newsTitle);
     String description = Uri.encodeComponent(widget.description);
-    String url = 'whatsapp://send?text=$title%0A$description';
+    String imageUrl = Uri.encodeComponent(widget.newImage);
+    String url = 'whatsapp://send?text=$title%0A$description%0A$imageUrl';
     try {
       bool launched = await launch(url);
       if (!launched) {
