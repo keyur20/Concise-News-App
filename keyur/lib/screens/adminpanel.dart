@@ -108,6 +108,36 @@ class _AdminPanelState extends State<AdminPanel> {
     );
   }
 
+  void _removeImage() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Remove Image?"),
+          content: Text("Are you sure you want to remove the profile photo?"),
+          actions: <Widget>[
+            TextButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text("Remove"),
+              onPressed: () {
+                setState(() {
+                  _image = null;
+                  _imageUrl = null;
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   signout() async {
     await GoogleSignIn().signOut();
     await FirebaseAuth.instance.signOut();
@@ -137,25 +167,35 @@ class _AdminPanelState extends State<AdminPanel> {
           Divider(), // Line above
           Padding(
             padding: EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Stack(
+              alignment: Alignment.bottomRight, // Aligning the stack content
               children: [
-                Text(
-                  'Profile',
-                  style: TextStyle(fontSize: 16),
+                Column(
+                  children: [
+                    Text(
+                      'Profile',
+                      style: TextStyle(fontSize: 16),
+                      textAlign: TextAlign.center, // Centering the text horizontally
+                    ),
+                    SizedBox(height: 8.0), // Adding some spacing between text and avatar
+                    GestureDetector(
+                      onTap: _getImage,
+                      child: CircleAvatar(
+                        radius: 60, // Increased radius to make it larger
+                        backgroundImage: _imageUrl != null // Use _imageUrl if available
+                            ? NetworkImage(_imageUrl!)
+                            : (_image != null
+                                ? FileImage(_image!)
+                                : AssetImage('assets/images/dummy_profile.png') as ImageProvider),
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(height: 8.0),
-                GestureDetector(
-                  onTap: _getImage,
-                  child: CircleAvatar(
-                    radius: 25,
-                    backgroundImage: _imageUrl != null // Use _imageUrl if available
-                        ? NetworkImage(_imageUrl!)
-                        : (_image != null
-                        ? FileImage(_image!)
-                        : AssetImage('assets/images/dummy_profile.png') as ImageProvider),
+                if (_imageUrl != null || _image != null) // Conditional rendering of cross icon
+                  IconButton(
+                    icon: Icon(Icons.close),
+                    onPressed: () => _removeImage(),
                   ),
-                ),
               ],
             ),
           ),
@@ -167,11 +207,11 @@ class _AdminPanelState extends State<AdminPanel> {
               children: [
                 Text('Theme', style: TextStyle(fontSize: 16)),
                 Obx(() => Switch(
-                  value: themeController.isDarkTheme.value,
-                  onChanged: (value) {
-                    themeController.toggleTheme();
-                  },
-                )),
+                      value: themeController.isDarkTheme.value,
+                      onChanged: (value) {
+                        themeController.toggleTheme();
+                      },
+                    )),
               ],
             ),
           ),
