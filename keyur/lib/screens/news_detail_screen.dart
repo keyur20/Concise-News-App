@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:share/share.dart';
 
 class NewsDetailScreen extends StatefulWidget {
   final String newImage,
@@ -201,18 +201,18 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
     );
   }
 
-  void _shareOnWhatsApp() async {
-    String title = Uri.encodeComponent(widget.newsTitle);
-    String description = Uri.encodeComponent(widget.description);
-    String imageUrl = Uri.encodeComponent(widget.newImage);
-    String url = 'whatsapp://send?text=$title%0A$description%0A$imageUrl';
+  void _shareOnWhatsApp() {
+    String title = widget.newsTitle;
+    String description = widget.description;
+    String imageUrl = widget.newImage;
+    String appDownloadLink = 'https://example.com'; // Replace with your actual app download link
+
+    String shareMessage = '$title\n$description\n$imageUrl\n\nFor more such news, download the app: $appDownloadLink';
+
     try {
-      bool launched = await launch(url);
-      if (!launched) {
-        throw 'Could not launch $url';
-      }
+      Share.share(shareMessage);
     } catch (e) {
-      print('Error launching WhatsApp: $e');
+      print('Error sharing on WhatsApp: $e');
     }
   }
 }
