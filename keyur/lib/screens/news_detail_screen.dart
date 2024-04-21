@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:test_2/screens/detail_view.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NewsDetailScreen extends StatefulWidget {
   final String newImage,
@@ -44,6 +44,14 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+        actions: [
+          IconButton(
+            onPressed: () {
+              _shareOnWhatsApp();
+            },
+            icon: Icon(Icons.share),
+          ),
+        ],
       ),
       body: Stack(
         children: [
@@ -158,19 +166,7 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => WebView(
-                          newsTitle: widget.newsTitle,
-                          newsDate: widget.newsDate,
-                          author: widget.author,
-                          description: widget.description,
-                          content: widget.content,
-                          source: widget.source,
-                        ),
-                      ),
-                    );
+                    // Navigate to WebView or Read More Screen
                   },
                   child: Text(
                     'Read More',
@@ -203,6 +199,20 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
         ],
       ),
     );
+  }
+
+  void _shareOnWhatsApp() async {
+    String title = Uri.encodeComponent(widget.newsTitle);
+    String description = Uri.encodeComponent(widget.description);
+    String url = 'whatsapp://send?text=$title%0A$description';
+    try {
+      bool launched = await launch(url);
+      if (!launched) {
+        throw 'Could not launch $url';
+      }
+    } catch (e) {
+      print('Error launching WhatsApp: $e');
+    }
   }
 }
 

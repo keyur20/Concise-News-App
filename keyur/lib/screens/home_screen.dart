@@ -1,8 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:test_2/models/News_Channel_Headlines_Model.dart';
 import 'package:test_2/screen_model/news_screen_model.dart';
 import 'package:test_2/screens/categories_screen.dart';
@@ -463,3 +463,4 @@ const spinKit2 = SpinKitFadingCircle(
   color: Colors.amber,
   size: 50,
 );
+
