@@ -13,6 +13,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:test_2/screens/adminpanel.dart';
 import 'package:test_2/screens/news_detail_screen.dart';
 
+
 class CategoriesScreen extends StatefulWidget {
   const CategoriesScreen({super.key});
 

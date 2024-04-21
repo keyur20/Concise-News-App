@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:share/share.dart';
+import 'comments.dart'; // Import the CommentsPage
 
 class NewsDetailScreen extends StatefulWidget {
   final String newImage,
@@ -164,6 +165,16 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                     ),
                   ),
                 ),
+                IconButton(
+                  onPressed: () {
+                    String newsId = _generateNewsId(widget.newsTitle);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CommentsPage(newsId: newsId)),
+                    );
+                  },
+                  icon: Icon(Icons.comment),
+                ),
                 ElevatedButton(
                   onPressed: () {
                     // Navigate to WebView or Read More Screen
@@ -214,6 +225,11 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
     } catch (e) {
       print('Error sharing on WhatsApp: $e');
     }
+  }
+
+  String _generateNewsId(String newsTitle) {
+    // Remove spaces and convert to lowercase to create a unique ID
+    return newsTitle.replaceAll(' ', '').toLowerCase();
   }
 }
 
