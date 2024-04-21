@@ -1,30 +1,5 @@
-// import 'package:flutter/material.dart';
-// import 'package:webview_flutter/webview_flutter.dart';
-
-// class WebView extends StatefulWidget {
-//   // final String newImage,newsTitle, newsDate,author,description,content,source;
-//   const WebView({super.key});
-
-//   @override
-//   State<WebView> createState() => _WebViewState();
-// }
-
-// class _WebViewState extends State<WebView> {
-
-//   final controller = WebViewController()
-//   ..setJavaScriptMode(JavaScriptMode.unrestricted)
-//   ..loadRequest(Uri.parse("https://youtube.com"));
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return SafeArea(child: WebViewWidget(controller: controller,));
-//   }
-// }
-
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:test_2/repository/web_view_news_repository.dart';
-
 
 class WebView extends StatefulWidget {
   final String newsTitle;
@@ -35,14 +10,14 @@ class WebView extends StatefulWidget {
   final String source;
 
   const WebView({
-    super.key,
+    Key? key,
     required this.newsTitle,
     required this.newsDate,
     required this.author,
     required this.description,
     required this.content,
     required this.source,
-  });
+  }) : super(key: key);
 
   @override
   State<WebView> createState() => _WebViewState();
@@ -69,7 +44,12 @@ class _WebViewState extends State<WebView> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: WebViewWidget(controller: _controller),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('News Article'),
+        ),
+        body: WebViewWidget(controller: _controller),
+      ),
     );
   }
 }

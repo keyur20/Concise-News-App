@@ -3,7 +3,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:test_2/screens/detail_view.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class NewsDetailScreen extends StatefulWidget {
   final String newImage,
@@ -158,8 +157,20 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () async {
-                    // Navigate to WebView or launch URL
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => WebView(
+                          newsTitle: widget.newsTitle,
+                          newsDate: widget.newsDate,
+                          author: widget.author,
+                          description: widget.description,
+                          content: widget.content,
+                          source: widget.source,
+                        ),
+                      ),
+                    );
                   },
                   child: Text(
                     'Read More',
