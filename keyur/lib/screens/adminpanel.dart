@@ -10,6 +10,8 @@ import 'package:test_2/theme_provider.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'help.dart'; // Import the Help.dart file
+
 class AdminPanel extends StatefulWidget {
   @override
   _AdminPanelState createState() => _AdminPanelState();
@@ -148,6 +150,13 @@ class _AdminPanelState extends State<AdminPanel> {
     Share.share('Check out this cool app: $appLink');
   }
 
+  void openHelpPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HelpPage()), // Navigate to the HelpPage
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final ThemeController themeController = Get.find<ThemeController>();
@@ -213,6 +222,25 @@ class _AdminPanelState extends State<AdminPanel> {
                       },
                     )),
               ],
+            ),
+          ),
+          Divider(), // New divider line
+          GestureDetector(
+            onTap: openHelpPage, // Navigate to the HelpPage
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Aligning the help text horizontally
+                children: [
+                  Text(
+                    'FAQs and About US',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Theme.of(context).textTheme.bodyText1!.color, // Use theme text color
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
