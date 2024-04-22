@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class CommentsPage extends StatefulWidget {
   final String newsId;
@@ -13,6 +14,7 @@ class CommentsPage extends StatefulWidget {
 class _CommentsPageState extends State<CommentsPage> {
   final TextEditingController _commentController = TextEditingController();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +102,18 @@ class _CommentsPageState extends State<CommentsPage> {
     );
   }
 
-  void _addComment(String newsId, String comment) {
-    _firestore.collection('news').doc(newsId).collection('comments').add({'comment': comment});
+  void _addComment(String newsId, String comment) async {
+    final user = _auth.currentUser;
+    if (user == null) {
+      // Handle if user is not logged in
+      return;
+    }
+
+    final String userId = user.email ?? ''; // Use email as user ID
+    await _firestore.collection('news').doc(newsId).collection('comments').add({
+      'userId': userId,
+      'comment': comment,
+      'timestamp': DateTime.now(),
+    });
   }
 }
