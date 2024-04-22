@@ -38,7 +38,7 @@ class _WebViewState extends State<WebView> {
     // Construct the news URL based on the provided parameters
     // For example, you could use a template like:
     // "https://example.com/news?title=${widget.newsTitle}&date=${widget.newsDate}&author=${widget.author}&description=${widget.description}&content=${widget.content}&source=${widget.source}"
-    return 'https://newsapi.org/v2/top-headlines/sources?apiKey=3935233245964f748dd3ec4594b5471c';
+    return 'https://newsapi.org/v2/top-headlines/sources?apiKey=2746d82c5ebb402d95ef4232e5a46f40';
   }
 
   @override

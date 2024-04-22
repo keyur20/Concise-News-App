@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 Future<Map<String, dynamic>> fetchNewsArticle(String source, String apiKey) async {
-  final url = Uri.parse('https://newsapi.org/v2/top-headlines?sources&apiKey=3935233245964f748dd3ec4594b5471c');
+  final url = Uri.parse('https://newsapi.org/v2/top-headlines?sources&apiKey=2746d82c5ebb402d95ef4232e5a46f40');
   final response = await http.get(url);
 
   if (response.statusCode == 200) {

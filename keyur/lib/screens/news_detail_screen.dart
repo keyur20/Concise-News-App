@@ -160,7 +160,7 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                     'Select Emoji',
                     style: GoogleFonts.poppins(
                       fontSize: 15,
-                      color: Colors.black87,
+                      color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black87,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -183,7 +183,7 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                     'Read More',
                     style: GoogleFonts.poppins(
                       fontSize: 15,
-                      color: Colors.black87,
+                      color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black87,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
