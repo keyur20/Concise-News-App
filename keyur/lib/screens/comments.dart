@@ -59,7 +59,12 @@ class _CommentsPageState extends State<CommentsPage> {
                             color: Colors.grey[300],
                             borderRadius: BorderRadius.circular(8.0),
                           ),
-                          child: Text(comments[index]),
+                          child: Text(
+                            comments[index],
+                            style: TextStyle(
+                              color: Colors.black, // Set text color to black
+                            ),
+                          ),
                         ),
                       ],
                     );

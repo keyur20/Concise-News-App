@@ -179,7 +179,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   maxLines: 3,
   style: GoogleFonts.poppins(
     fontSize: 15,
-    color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black54,
+    color: Theme.of(context).brightness == Brightness.dark ? Color.fromARGB(255, 255, 255, 255) : Colors.black54,
     fontWeight: FontWeight.w700,
   ),
 ),
