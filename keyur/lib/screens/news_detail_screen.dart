@@ -4,6 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:share/share.dart';
 import 'comments.dart'; // Import the CommentsPage
+import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
+import 'package:firebase_auth/firebase_auth.dart'; // Import FirebaseAuth
 
 class NewsDetailScreen extends StatefulWidget {
   final String newImage,
@@ -151,7 +153,10 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                                 _selectedEmoji = null;
                               });
                             });
+                            // Store selected emoji in Firestore
+                            _storeEmojiInFirestore(emoji);
                           },
+                          selectedEmoji: _selectedEmoji,
                         );
                       },
                     );
@@ -227,6 +232,21 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
     }
   }
 
+  void _storeEmojiInFirestore(String emoji) {
+    // Get the current user's ID
+    String? userId = FirebaseAuth.instance.currentUser?.uid;
+
+    if (userId != null) {
+      // Use the news title and user ID as the document ID
+      String newsId = _generateNewsId(widget.newsTitle);
+      String documentId = '$newsId-$userId';
+
+      FirebaseFirestore.instance.collection('emojis').doc(documentId).set({
+        'emoji': emoji,
+      });
+    }
+  }
+
   String _generateNewsId(String newsTitle) {
     // Remove spaces and convert to lowercase to create a unique ID
     return newsTitle.replaceAll(' ', '').toLowerCase();
@@ -235,8 +255,9 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
 
 class EmojiSelection extends StatelessWidget {
   final void Function(String) onEmojiSelected;
+  final String? selectedEmoji;
 
-  const EmojiSelection({Key? key, required this.onEmojiSelected})
+  const EmojiSelection({Key? key, required this.onEmojiSelected, this.selectedEmoji})
       : super(key: key);
 
   @override
@@ -265,50 +286,34 @@ class EmojiSelection extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop();
-                  onEmojiSelected("😊");
-                },
-                child: Opacity(
-                  opacity: 0.5,
-                  child: Text("😊", style: TextStyle(fontSize: 30)),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop();
-                  onEmojiSelected("😔");
-                },
-                child: Opacity(
-                  opacity: 0.5,
-                  child: Text("😔", style: TextStyle(fontSize: 30)),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop();
-                  onEmojiSelected("😠");
-                },
-                child: Opacity(
-                  opacity: 0.5,
-                  child: Text("😠", style: TextStyle(fontSize: 30)),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).pop();
-                  onEmojiSelected("👍");
-                },
-                child: Opacity(
-                  opacity: 0.5,
-                  child: Text("👍", style: TextStyle(fontSize: 30)),
-                ),
-              ),
+              buildEmojiButton(context, "😊"),
+              buildEmojiButton(context, "😔"),
+              buildEmojiButton(context, "😠"),
+              buildEmojiButton(context, "👍"),
             ],
           ),
         ],
       ),
     );
   }
+
+  Widget buildEmojiButton(BuildContext context, String emoji) {
+  return GestureDetector(
+    onTap: () {
+      Navigator.of(context).pop();
+      onEmojiSelected(emoji);
+    },
+    child: Opacity(
+      opacity: selectedEmoji == emoji ? 1.0 : 0.5,
+      child: Text(
+        emoji,
+        style: TextStyle(
+          fontSize: 30,
+          color: selectedEmoji == emoji ? Colors.black : Colors.black.withOpacity(0.5),
+        ),
+      ),
+    ),
+  );
+}
+
 }

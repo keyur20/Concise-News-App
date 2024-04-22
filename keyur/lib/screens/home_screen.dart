@@ -178,39 +178,46 @@ class _HomeScreenState extends State<HomeScreen> {
                                           )));
                             } else {
                               showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text('Sensitive Content Warning'),
-                                    content: Text('The news contains sensitive content. Do you want to continue?'),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        child: Text('Go Back'),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
-                                      TextButton(
-                                        child: Text('Continue'),
-                                        onPressed: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) => NewsDetailScreen(
-                                                        newImage: snapshot.data!.articles![index].urlToImage.toString(),
-                                                        newsTitle: snapshot.data!.articles![index].title.toString(),
-                                                        newsDate: snapshot.data!.articles![index].publishedAt.toString(),
-                                                        author: snapshot.data!.articles![index].author.toString(),
-                                                        description: snapshot.data!.articles![index].description.toString(),
-                                                        content: snapshot.data!.articles![index].content.toString(),
-                                                        source: snapshot.data!.articles![index].source!.name.toString(),
-                                                      )));
-                                        },
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
+  context: context,
+  builder: (BuildContext context) {
+    return AlertDialog(
+      title: Text('Sensitive Content Warning'),
+      content: Text('The news contains sensitive content. Do you want to continue?'),
+      actions: <Widget>[
+        TextButton(
+          child: Text('Go Back'),
+          onPressed: () {
+            Navigator.of(context).pop(); // Dismiss the dialog
+          },
+        ),
+        TextButton(
+          child: Text('Continue'),
+          onPressed: () {
+  Navigator.of(context).pop(); // Dismiss the dialog
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => NewsDetailScreen(
+        newImage: snapshot.data!.articles![index].urlToImage.toString(),
+        newsTitle: snapshot.data!.articles![index].title.toString(),
+        newsDate: snapshot.data!.articles![index].publishedAt.toString(),
+        author: snapshot.data!.articles![index].author.toString(),
+        description: snapshot.data!.articles![index].description.toString(),
+        content: snapshot.data!.articles![index].content.toString(),
+        source: snapshot.data!.articles![index].source!.name.toString(),
+      ),
+    ),
+  );
+},
+
+
+
+        ),
+      ],
+    );
+  },
+);
+
                             }
                           },
                           child: SizedBox(
