@@ -40,7 +40,10 @@ class _CommentsPageState extends State<CommentsPage> {
 
                 return ListView.builder(
                   itemCount: comments.length,
+                  reverse: true, // Start building items from the end of the list
                   itemBuilder: (context, index) {
+                    final comment = comments[index];
+
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -62,7 +65,7 @@ class _CommentsPageState extends State<CommentsPage> {
                             borderRadius: BorderRadius.circular(8.0),
                           ),
                           child: Text(
-                            comments[index],
+                            comment,
                             style: TextStyle(
                               color: Colors.black, // Set text color to black
                             ),
