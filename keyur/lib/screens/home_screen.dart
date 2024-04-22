@@ -168,14 +168,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => NewsDetailScreen(
-                                        newImage: snapshot.data!.articles![index].urlToImage.toString(),
-                                        newsTitle: snapshot.data!.articles![index].title.toString(),
-                                        newsDate: snapshot.data!.articles![index].publishedAt.toString(),
-                                        author: snapshot.data!.articles![index].author.toString(),
-                                        description: snapshot.data!.articles![index].description.toString(),
-                                        content: snapshot.data!.articles![index].content.toString(),
-                                        source: snapshot.data!.articles![index].source!.name.toString(),
-                                      )));
+                                            newImage: snapshot.data!.articles![index].urlToImage.toString(),
+                                            newsTitle: snapshot.data!.articles![index].title.toString(),
+                                            newsDate: snapshot.data!.articles![index].publishedAt.toString(),
+                                            author: snapshot.data!.articles![index].author.toString(),
+                                            description: snapshot.data!.articles![index].description.toString(),
+                                            content: snapshot.data!.articles![index].content.toString(),
+                                            source: snapshot.data!.articles![index].source!.name.toString(),
+                                          )));
                             } else {
                               showDialog(
                                 context: context,
@@ -197,14 +197,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) => NewsDetailScreen(
-                                                    newImage: snapshot.data!.articles![index].urlToImage.toString(),
-                                                    newsTitle: snapshot.data!.articles![index].title.toString(),
-                                                    newsDate: snapshot.data!.articles![index].publishedAt.toString(),
-                                                    author: snapshot.data!.articles![index].author.toString(),
-                                                    description: snapshot.data!.articles![index].description.toString(),
-                                                    content: snapshot.data!.articles![index].content.toString(),
-                                                    source: snapshot.data!.articles![index].source!.name.toString(),
-                                                  )));
+                                                        newImage: snapshot.data!.articles![index].urlToImage.toString(),
+                                                        newsTitle: snapshot.data!.articles![index].title.toString(),
+                                                        newsDate: snapshot.data!.articles![index].publishedAt.toString(),
+                                                        author: snapshot.data!.articles![index].author.toString(),
+                                                        description: snapshot.data!.articles![index].description.toString(),
+                                                        content: snapshot.data!.articles![index].content.toString(),
+                                                        source: snapshot.data!.articles![index].source!.name.toString(),
+                                                      )));
                                         },
                                       ),
                                     ],
@@ -237,7 +237,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   bottom: 17,
                                   child: Card(
                                     elevation: 5,
-                                    color: Colors.white,
+                                    color: Theme.of(context).brightness == Brightness.dark ? Colors.black : Colors.white,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12),
                                     ),
@@ -256,7 +256,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                               snapshot.data!.articles![index].title.toString(),
                                               maxLines: 3,
                                               overflow: TextOverflow.ellipsis,
-                                              style: GoogleFonts.poppins(fontSize: 17, fontWeight: FontWeight.w700),
+                                              style: GoogleFonts.poppins(
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.w700,
+                                                color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
+                                              ),
                                             ),
                                           ),
                                           Spacer(),
@@ -269,7 +273,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   snapshot.data!.articles![index].source!.name.toString(),
                                                   maxLines: 2,
                                                   overflow: TextOverflow.ellipsis,
-                                                  style: GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.w600),
+                                                  style: GoogleFonts.poppins(
+                                                    fontSize: 11,
+                                                    fontWeight: FontWeight.w600,
+                                                    color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black54,
+                                                  ),
                                                 ),
                                                 Text(
                                                   format.format(dateTime),
@@ -332,14 +340,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => NewsDetailScreen(
-                                        newImage: snapshot.data!.articles![index].urlToImage.toString(),
-                                        newsTitle: snapshot.data!.articles![index].title.toString(),
-                                        newsDate: snapshot.data!.articles![index].publishedAt.toString(),
-                                        author: snapshot.data!.articles![index].author.toString(),
-                                        description: snapshot.data!.articles![index].description.toString(),
-                                        content: snapshot.data!.articles![index].content.toString(),
-                                        source: snapshot.data!.articles![index].source!.name.toString(),
-                                      )));
+                                            newImage: snapshot.data!.articles![index].urlToImage.toString(),
+                                            newsTitle: snapshot.data!.articles![index].title.toString(),
+                                            newsDate: snapshot.data!.articles![index].publishedAt.toString(),
+                                            author: snapshot.data!.articles![index].author.toString(),
+                                            description: snapshot.data!.articles![index].description.toString(),
+                                            content: snapshot.data!.articles![index].content.toString(),
+                                            source: snapshot.data!.articles![index].source!.name.toString(),
+                                          )));
                             } else {
                               showDialog(
                                 context: context,
@@ -361,14 +369,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) => NewsDetailScreen(
-                                                    newImage: snapshot.data!.articles![index].urlToImage.toString(),
-                                                    newsTitle: snapshot.data!.articles![index].title.toString(),
-                                                    newsDate: snapshot.data!.articles![index].publishedAt.toString(),
-                                                    author: snapshot.data!.articles![index].author.toString(),
-                                                    description: snapshot.data!.articles![index].description.toString(),
-                                                    content: snapshot.data!.articles![index].content.toString(),
-                                                    source: snapshot.data!.articles![index].source!.name.toString(),
-                                                  )));
+                                                        newImage: snapshot.data!.articles![index].urlToImage.toString(),
+                                                        newsTitle: snapshot.data!.articles![index].title.toString(),
+                                                        newsDate: snapshot.data!.articles![index].publishedAt.toString(),
+                                                        author: snapshot.data!.articles![index].author.toString(),
+                                                        description: snapshot.data!.articles![index].description.toString(),
+                                                        content: snapshot.data!.articles![index].content.toString(),
+                                                        source: snapshot.data!.articles![index].source!.name.toString(),
+                                                      )));
                                         },
                                       ),
                                     ],
@@ -464,3 +472,19 @@ const spinKit2 = SpinKitFadingCircle(
   size: 50,
 );
 
+void main() {
+  runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    theme: ThemeData(
+      brightness: Brightness.light,
+      primarySwatch: Colors.blue,
+      visualDensity: VisualDensity.adaptivePlatformDensity,
+    ),
+    darkTheme: ThemeData(
+      brightness: Brightness.dark,
+      primarySwatch: Colors.blue,
+      visualDensity: VisualDensity.adaptivePlatformDensity,
+    ),
+    home: HomeScreen(),
+  ));
+}
