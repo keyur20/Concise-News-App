@@ -11,6 +11,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'help.dart'; // Import the Help.dart file
+import 'feedback.dart'; // Import the Feedback.dart file
 
 class AdminPanel extends StatefulWidget {
   @override
@@ -157,6 +158,13 @@ class _AdminPanelState extends State<AdminPanel> {
     );
   }
 
+  void openFeedbackPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => FeedbackPage()), // Navigate to the FeedbackPage
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final ThemeController themeController = Get.find<ThemeController>();
@@ -234,6 +242,25 @@ class _AdminPanelState extends State<AdminPanel> {
                 children: [
                   Text(
                     'FAQs and About US',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Theme.of(context).textTheme.bodyText1!.color, // Use theme text color
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Divider(), // New divider line
+          GestureDetector(
+            onTap: openFeedbackPage, // Navigate to the FeedbackPage
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Aligning the feedback text horizontally
+                children: [
+                  Text(
+                    'Feedback',
                     style: TextStyle(
                       fontSize: 16,
                       color: Theme.of(context).textTheme.bodyText1!.color, // Use theme text color
