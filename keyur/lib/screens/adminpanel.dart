@@ -112,34 +112,46 @@ class _AdminPanelState extends State<AdminPanel> {
   }
 
   void _removeImage() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Remove Image?"),
-          content: Text("Are you sure you want to remove the profile photo?"),
-          actions: <Widget>[
-            TextButton(
-              child: Text("Cancel"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text("Remove"),
-              onPressed: () {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text("Remove Image?"),
+        content: Text("Are you sure you want to remove the profile photo?"),
+        actions: <Widget>[
+          TextButton(
+            child: Text("Cancel"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: Text("Remove"),
+            onPressed: () async {
+              try {
                 setState(() {
                   _image = null;
                   _imageUrl = null;
                 });
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+
+                // Delete image URL from Firestore
+                await FirebaseFirestore.instance.collection('example').doc(user?.uid).update({
+                  'imageUrl': FieldValue.delete(),
+                });
+
+                print('Image removed from Firestore.');
+              } catch (e) {
+                print('Error removing image from Firestore: $e');
+              }
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
 
   signout() async {
     await GoogleSignIn().signOut();
