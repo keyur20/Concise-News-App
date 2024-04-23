@@ -23,19 +23,19 @@ class HelpPage extends StatelessWidget {
             ),
             SizedBox(height: 16.0),
             FAQItem(
-              question: 'What is Lorem Ipsum?',
+              question: 'How can I share an article?',
               answer:
-                  'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+                  'To share an article, tap on the share icon at the top right corner of the article detail screen.',
             ),
             FAQItem(
-              question: 'Why do we use it?',
+              question: 'Can I save articles for later?',
               answer:
-                  'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
+                  'Yes, you can save articles by tapping on the bookmark icon on the article detail screen.',
             ),
             FAQItem(
-              question: 'Where does it come from?',
+              question: 'How do I view comments on an article?',
               answer:
-                  'Contrary to popular belief, Lorem Ipsum is not simply random text.',
+                  'To view comments on an article, tap on the comment icon on the article detail screen.',
             ),
             SizedBox(height: 32.0),
             Text(
@@ -49,12 +49,12 @@ class HelpPage extends StatelessWidget {
             AboutUsItem(
               title: 'Our Mission',
               description:
-                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+                  'Our mission is to provide users with the latest news from reliable sources and enhance their reading experience.',
             ),
             AboutUsItem(
               title: 'Our Vision',
               description:
-                  'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.',
+                  'We envision a platform where users can stay informed about current events and engage with high-quality journalism.',
             ),
           ],
         ),

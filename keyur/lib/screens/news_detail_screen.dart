@@ -6,6 +6,7 @@ import 'package:share/share.dart';
 import 'comments.dart'; // Import the CommentsPage
 import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
 import 'package:firebase_auth/firebase_auth.dart'; // Import FirebaseAuth
+import 'detail_view.dart';
 
 class NewsDetailScreen extends StatefulWidget {
   final String newImage,
@@ -182,7 +183,17 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    // Navigate to WebView or Read More Screen
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => DetailView(
+                        newsTitle: widget.newsTitle,
+                        newsDate: widget.newsDate,
+                        author: widget.author,
+                        description: widget.description,
+                        content: widget.content,
+                        source: widget.source,
+                      )),
+                    );
                   },
                   child: Text(
                     'Read More',
@@ -298,22 +309,77 @@ class EmojiSelection extends StatelessWidget {
   }
 
   Widget buildEmojiButton(BuildContext context, String emoji) {
-  return GestureDetector(
-    onTap: () {
-      Navigator.of(context).pop();
-      onEmojiSelected(emoji);
-    },
-    child: Opacity(
-      opacity: selectedEmoji == emoji ? 1.0 : 0.5,
-      child: Text(
-        emoji,
-        style: TextStyle(
-          fontSize: 30,
-          color: selectedEmoji == emoji ? Colors.black : Colors.black.withOpacity(0.5),
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).pop();
+        onEmojiSelected(emoji);
+      },
+      child: Opacity(
+        opacity: selectedEmoji == emoji ? 1.0 : 0.5,
+        child: Text(
+          emoji,
+          style: TextStyle(
+            fontSize: 30,
+            color: selectedEmoji == emoji ? Colors.black : Colors.black.withOpacity(0.5),
+          ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }
 
+class DetailView extends StatelessWidget {
+  final String newsTitle;
+  final String newsDate;
+  final String author;
+  final String description;
+  final String content;
+  final String source;
+
+  const DetailView({
+    Key? key,
+    required this.newsTitle,
+    required this.newsDate,
+    required this.author,
+    required this.description,
+    required this.content,
+    required this.source,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('News Article'),
+      ),
+      body: Center(
+        child: Text('Detail View Content'),
+      ),
+    );
+  }
+}
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: NewsDetailScreen(
+        newImage: 'https://via.placeholder.com/150',
+        newsTitle: 'Sample News',
+        newsDate: '2024-04-23',
+        author: 'John Doe',
+        description: 'Sample Description',
+        content: 'Sample Content',
+        source: 'Sample Source',
+      ),
+    );
+  }
 }
