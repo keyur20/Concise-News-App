@@ -10,7 +10,7 @@ class NewsRepository{
 
   Future<NewsChannelHeadlinesModel> fetchNewsChannelheadlinesApi(String channelName) async{
 
-    String url = 'https://newsapi.org/v2/top-headlines?sources=${channelName}&apiKey=2746d82c5ebb402d95ef4232e5a46f40';
+    String url = 'https://newsapi.org/v2/top-headlines?sources=${channelName}&apiKey=02faa8fcf4c844eaa243da9ad5c897f9';
 
     print(url);
     final response = await http.get(Uri.parse(url));
@@ -32,7 +32,7 @@ class NewsRepository{
 
   Future<CategoriesNewsModel> fetchCategoriesNewsApi(String category) async{
 
-    String url = 'https://newsapi.org/v2/everything?q=${category}&apiKey=2746d82c5ebb402d95ef4232e5a46f40';
+    String url = 'https://newsapi.org/v2/everything?q=${category}&apiKey=02faa8fcf4c844eaa243da9ad5c897f9';
 
     print(url);
     final response = await http.get(Uri.parse(url));

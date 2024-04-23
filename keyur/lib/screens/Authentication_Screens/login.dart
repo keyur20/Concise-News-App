@@ -137,7 +137,7 @@ class _LoginState extends State<Login> {
                             padding: const EdgeInsets.symmetric(vertical: 16.0),
                             child: Text(
                               "Sign in with Google",
-                              style: TextStyle(fontSize: 13, color: Color.fromARGB(255, 246, 246, 246)),
+                              style: TextStyle(fontSize: 10, color: Color.fromARGB(255, 246, 246, 246)),
                             ),
                           ),
                         ),

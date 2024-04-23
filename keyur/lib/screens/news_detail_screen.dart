@@ -244,16 +244,19 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
   }
 
   void _storeEmojiInFirestore(String emoji) {
-    // Get the current user's ID
-    String? userId = FirebaseAuth.instance.currentUser?.uid;
+    // Get the current user's ID and email
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      final userId = currentUser.uid;
+      final email = currentUser.email;
 
-    if (userId != null) {
       // Use the news title and user ID as the document ID
       String newsId = _generateNewsId(widget.newsTitle);
       String documentId = '$newsId-$userId';
 
       FirebaseFirestore.instance.collection('emojis').doc(documentId).set({
         'emoji': emoji,
+        'user_email': email, // Add user's email to Firestore
       });
     }
   }
