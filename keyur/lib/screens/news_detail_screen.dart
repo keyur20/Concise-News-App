@@ -243,23 +243,23 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
     }
   }
 
-  void _storeEmojiInFirestore(String emoji) {
-    // Get the current user's ID and email
-    final currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser != null) {
-      final userId = currentUser.uid;
-      final email = currentUser.email;
+ void _storeEmojiInFirestore(String emoji) {
+  // Get the current user's ID and email
+  final currentUser = FirebaseAuth.instance.currentUser;
+  if (currentUser != null) {
+    final email = currentUser.email;
 
-      // Use the news title and user ID as the document ID
-      String newsId = _generateNewsId(widget.newsTitle);
-      String documentId = '$newsId-$userId';
-
-      FirebaseFirestore.instance.collection('emojis').doc(documentId).set({
-        'emoji': emoji,
-        'user_email': email, // Add user's email to Firestore
-      });
-    }
+    // Use the user's email as the document ID
+    FirebaseFirestore.instance.collection('emojis').doc(email).collection('news').doc(_generateNewsId(widget.newsTitle)).set({
+      'news_title': widget.newsTitle, // Add news title to Firestore
+      'emoji': emoji, // Add selected emoji to Firestore
+    });
   }
+}
+
+
+
+
 
   String _generateNewsId(String newsTitle) {
     // Remove spaces and convert to lowercase to create a unique ID
