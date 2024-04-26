@@ -22,7 +22,7 @@ class _AdminPanelState extends State<AdminPanel> {
   final user = FirebaseAuth.instance.currentUser;
   File? _image;
   String? _imageUrl; // Added variable to store image URL
-  String? _selectedCategory = 'Category 1'; // Default selected category
+  String? _selectedCategory = 'General'; // Default selected category
 
   @override
   void initState() {
@@ -304,12 +304,7 @@ class _AdminPanelState extends State<AdminPanel> {
                     });
                     // Handle category selection here
                   },
-                  items: <String>['General',
-    'Entertainment',
-    'Health',
-    'Sports',
-    'Business',
-    'Technology']
+                  items: <String>['General', 'Entertainment', 'Health', 'Sports', 'Business', 'Technology']
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
