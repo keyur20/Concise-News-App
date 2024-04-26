@@ -42,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+    String selectedCategory = 'General';
 
     return Scaffold(
       appBar: AppBar(
@@ -312,8 +313,10 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Padding(
               padding: const EdgeInsets.all(20),
+              
               child: FutureBuilder<CategoriesNewsModel>(
-                future: newsScreenModel.fetchCategoriesNewsApi('General'),
+                
+                future: newsScreenModel.fetchCategoriesNewsApi(selectedCategory),
                 builder: (BuildContext context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(

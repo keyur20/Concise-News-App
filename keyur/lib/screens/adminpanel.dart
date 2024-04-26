@@ -22,6 +22,7 @@ class _AdminPanelState extends State<AdminPanel> {
   final user = FirebaseAuth.instance.currentUser;
   File? _image;
   String? _imageUrl; // Added variable to store image URL
+  String? _selectedCategory = 'Category 1'; // Default selected category
 
   @override
   void initState() {
@@ -112,46 +113,45 @@ class _AdminPanelState extends State<AdminPanel> {
   }
 
   void _removeImage() {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text("Remove Image?"),
-        content: Text("Are you sure you want to remove the profile photo?"),
-        actions: <Widget>[
-          TextButton(
-            child: Text("Cancel"),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          TextButton(
-            child: Text("Remove"),
-            onPressed: () async {
-              try {
-                setState(() {
-                  _image = null;
-                  _imageUrl = null;
-                });
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Remove Image?"),
+          content: Text("Are you sure you want to remove the profile photo?"),
+          actions: <Widget>[
+            TextButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text("Remove"),
+              onPressed: () async {
+                try {
+                  setState(() {
+                    _image = null;
+                    _imageUrl = null;
+                  });
 
-                // Delete image URL from Firestore
-                await FirebaseFirestore.instance.collection('example').doc(user?.uid).update({
-                  'imageUrl': FieldValue.delete(),
-                });
+                  // Delete image URL from Firestore
+                  await FirebaseFirestore.instance.collection('example').doc(user?.uid).update({
+                    'imageUrl': FieldValue.delete(),
+                  });
 
-                print('Image removed from Firestore.');
-              } catch (e) {
-                print('Error removing image from Firestore: $e');
-              }
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
-  );
-}
-
+                  print('Image removed from Firestore.');
+                } catch (e) {
+                  print('Error removing image from Firestore: $e');
+                }
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   signout() async {
     await GoogleSignIn().signOut();
@@ -236,11 +236,11 @@ class _AdminPanelState extends State<AdminPanel> {
               children: [
                 Text('Theme', style: TextStyle(fontSize: 16)),
                 Obx(() => Switch(
-                      value: themeController.isDarkTheme.value,
-                      onChanged: (value) {
-                        themeController.toggleTheme();
-                      },
-                    )),
+                  value: themeController.isDarkTheme.value,
+                  onChanged: (value) {
+                    themeController.toggleTheme();
+                  },
+                )),
               ],
             ),
           ),
@@ -280,6 +280,44 @@ class _AdminPanelState extends State<AdminPanel> {
                   ),
                 ],
               ),
+            ),
+          ),
+          Divider(), // New divider line
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Select Category',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).textTheme.bodyText1!.color, // Use theme text color
+                  ),
+                ),
+                DropdownButton<String>(
+                  value: _selectedCategory,
+                  icon: Icon(Icons.arrow_drop_down),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedCategory = newValue;
+                    });
+                    // Handle category selection here
+                  },
+                  items: <String>['General',
+    'Entertainment',
+    'Health',
+    'Sports',
+    'Business',
+    'Technology']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+              ],
             ),
           ),
         ],
