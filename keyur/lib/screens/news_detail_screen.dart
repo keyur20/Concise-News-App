@@ -35,7 +35,6 @@ class NewsDetailScreen extends StatefulWidget {
 class _NewsDetailScreenState extends State<NewsDetailScreen> {
   final format = DateFormat('MMMM dd, yyyy');
   late int _likeCounter; // Initialize the like counter
-
   String? _selectedEmoji;
 
   @override
@@ -201,7 +200,7 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                 ),
                 IconButton(
                   onPressed: () {
-                    _incrementLikeCounter(); // Increment like counter
+                    _toggleLike(); // Toggle like status
                   },
                   icon: Icon(Icons.favorite),
                 ),
@@ -297,35 +296,28 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
     });
   }
 
-  void _incrementLikeCounter() {
+  void _toggleLike() {
+  final user = FirebaseAuth.instance.currentUser;
   final newsId = _generateNewsId(widget.newsTitle);
-  final documentReference = FirebaseFirestore.instance.collection('like').doc(newsId);
+  final userEmail = user!.email;
+  final userLikeRef = FirebaseFirestore.instance.collection('like').doc(newsId).collection('users').doc(userEmail);
 
-  documentReference.update({'counter': FieldValue.increment(1)})
-    .then((_) {
-      setState(() {
-        _likeCounter++;
+  userLikeRef.get().then((docSnapshot) {
+    if (docSnapshot.exists) {
+      userLikeRef.delete().then((_) {
+        setState(() {
+          _likeCounter--;
+        });
       });
-    })
-    .catchError((error) {
-      if (error.toString().contains('not found')) {
-        // Document not found, create a new document with initial like counter value
-        documentReference.set({'counter': 1})
-          .then((_) {
-            setState(() {
-              _likeCounter = 1;
-            });
-          })
-          .catchError((error) {
-            print('Error creating document: $error');
-          });
-      } else {
-        // Other error occurred, log it
-        print('Error incrementing like counter: $error');
-      }
-    });
+    } else {
+      userLikeRef.set({'liked': true}).then((_) {
+        setState(() {
+          _likeCounter++;
+        });
+      });
+    }
+  });
 }
-
 
 
   String _generateNewsId(String newsTitle) {
