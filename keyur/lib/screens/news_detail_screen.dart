@@ -34,8 +34,34 @@ class NewsDetailScreen extends StatefulWidget {
 
 class _NewsDetailScreenState extends State<NewsDetailScreen> {
   final format = DateFormat('MMMM dd, yyyy');
+  late int _likeCounter; // Initialize the like counter
 
   String? _selectedEmoji;
+
+  @override
+  void initState() {
+    super.initState();
+    _likeCounter = 0;
+    // Fetch the like counter from Firestore when the screen initializes
+    _fetchLikeCounter();
+  }
+
+  // Function to fetch the like counter from Firestore
+  void _fetchLikeCounter() {
+    final newsId = _generateNewsId(widget.newsTitle);
+
+    // Reference to the document containing like counter for the news item
+    final documentReference = FirebaseFirestore.instance.collection('like').doc(newsId);
+
+    // Fetch the like counter from Firestore
+    documentReference.get().then((docSnapshot) {
+      if (docSnapshot.exists) {
+        setState(() {
+          _likeCounter = docSnapshot.data()?['counter'] ?? 0;
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -140,6 +166,9 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
               children: [
                 ElevatedButton(
                   onPressed: () {
+                    _storeEmojiInFirestore('👍'); // Store thumbs-up emoji on regular tap
+                  },
+                  onLongPress: () {
                     showModalBottomSheet<void>(
                       context: context,
                       isDismissible: false,
@@ -154,8 +183,7 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                                 _selectedEmoji = null;
                               });
                             });
-                            // Store selected emoji in Firestore
-                            _storeEmojiInFirestore(emoji);
+                            _storeEmojiInFirestore(emoji); // Store selected emoji in Firestore
                           },
                           selectedEmoji: _selectedEmoji,
                         );
@@ -163,12 +191,26 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
                     );
                   },
                   child: Text(
-                    'Select Emoji',
-                    style: GoogleFonts.poppins(
+                    '👍',
+                    style: TextStyle(
                       fontSize: 15,
                       color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black87,
                       fontWeight: FontWeight.w700,
                     ),
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    _incrementLikeCounter(); // Increment like counter
+                  },
+                  icon: Icon(Icons.favorite),
+                ),
+                Text(
+                  '$_likeCounter', // Display like counter
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black87,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
                 IconButton(
@@ -243,21 +285,46 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
     }
   }
 
- void _storeEmojiInFirestore(String emoji) {
-  // Get the current user's ID and email
-  final currentUser = FirebaseAuth.instance.currentUser;
-  if (currentUser != null) {
-    final email = currentUser.email;
+  void _storeEmojiInFirestore(String emoji) {
+    final newsId = _generateNewsId(widget.newsTitle);
 
-    // Use the user's email as the document ID
-    FirebaseFirestore.instance.collection('emojis').doc(email).collection('news').doc(_generateNewsId(widget.newsTitle)).set({
-      'news_title': widget.newsTitle, // Add news title to Firestore
-      'emoji': emoji, // Add selected emoji to Firestore
+    // Reference to the document containing emoji for the news item
+    final documentReference = FirebaseFirestore.instance.collection('emojis').doc(newsId);
+
+    // Store the selected emoji in Firestore
+    documentReference.set({
+      'emoji': emoji,
     });
   }
+
+  void _incrementLikeCounter() {
+  final newsId = _generateNewsId(widget.newsTitle);
+  final documentReference = FirebaseFirestore.instance.collection('like').doc(newsId);
+
+  documentReference.update({'counter': FieldValue.increment(1)})
+    .then((_) {
+      setState(() {
+        _likeCounter++;
+      });
+    })
+    .catchError((error) {
+      if (error.toString().contains('not found')) {
+        // Document not found, create a new document with initial like counter value
+        documentReference.set({'counter': 1})
+          .then((_) {
+            setState(() {
+              _likeCounter = 1;
+            });
+          })
+          .catchError((error) {
+            print('Error creating document: $error');
+          });
+      } else {
+        // Other error occurred, log it
+        print('Error incrementing like counter: $error');
+      }
+    });
 }
-
-
 
 
 
