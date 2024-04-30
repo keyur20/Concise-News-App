@@ -28,6 +28,7 @@ class _AdminPanelState extends State<AdminPanel> {
   void initState() {
     super.initState();
     _fetchImageUrl();
+    _fetchSelectedCategory(); // Fetch selected category from Firestore
   }
 
   Future<void> _fetchImageUrl() async {
@@ -177,6 +178,32 @@ class _AdminPanelState extends State<AdminPanel> {
     );
   }
 
+  Future<void> _fetchSelectedCategory() async {
+    try {
+      final snapshot = await FirebaseFirestore.instance.collection('category').doc(user!.email).get();
+      if (snapshot.exists) {
+        setState(() {
+          _selectedCategory = snapshot.data()?['category'];
+        });
+      }
+    } catch (e) {
+      print('Error fetching selected category: $e');
+    }
+  }
+
+  void _updateCategory(String category) async {
+    try {
+      await FirebaseFirestore.instance.collection('category').doc(user!.email).set({
+        'category': category,
+      });
+      setState(() {
+        _selectedCategory = category;
+      });
+    } catch (e) {
+      print('Error updating category: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final ThemeController themeController = Get.find<ThemeController>();
@@ -302,7 +329,7 @@ class _AdminPanelState extends State<AdminPanel> {
                     setState(() {
                       _selectedCategory = newValue;
                     });
-                    // Handle category selection here
+                    _updateCategory(newValue!); // Update category in Firestore
                   },
                   items: <String>['General', 'Entertainment', 'Health', 'Sports', 'Business', 'Technology']
                       .map<DropdownMenuItem<String>>((String value) {
