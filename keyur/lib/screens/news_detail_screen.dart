@@ -47,20 +47,19 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
 
   // Function to fetch the like counter from Firestore
   void _fetchLikeCounter() {
-    final newsId = _generateNewsId(widget.newsTitle);
+  final newsId = _generateNewsId(widget.newsTitle);
 
-    // Reference to the document containing like counter for the news item
-    final documentReference = FirebaseFirestore.instance.collection('like').doc(newsId);
+  final documentReference = FirebaseFirestore.instance.collection('like_counter').doc(newsId);
 
-    // Fetch the like counter from Firestore
-    documentReference.get().then((docSnapshot) {
-      if (docSnapshot.exists) {
-        setState(() {
-          _likeCounter = docSnapshot.data()?['counter'] ?? 0;
-        });
-      }
-    });
-  }
+  documentReference.get().then((docSnapshot) {
+    if (docSnapshot.exists) {
+      setState(() {
+        _likeCounter = docSnapshot.data()?['counter'] ?? 0;
+      });
+    }
+  });
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -308,16 +307,29 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
         setState(() {
           _likeCounter--;
         });
+        _updateCounterInFirestore(newsId, _likeCounter);
       });
     } else {
       userLikeRef.set({'liked': true}).then((_) {
         setState(() {
           _likeCounter++;
         });
+        _updateCounterInFirestore(newsId, _likeCounter);
       });
     }
   });
 }
+
+void _updateCounterInFirestore(String newsId, int counterValue) {
+  final counterRef = FirebaseFirestore.instance.collection('like_counter').doc(newsId);
+
+  counterRef.set({'counter': counterValue}).then((_) {
+    print('Counter updated successfully: $counterValue');
+  }).catchError((error) {
+    print('Error updating counter: $error');
+  });
+}
+
 
 
   String _generateNewsId(String newsTitle) {
