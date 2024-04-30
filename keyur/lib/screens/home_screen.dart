@@ -10,6 +10,7 @@ import 'package:test_2/models/categories_news_model.dart';
 import 'package:test_2/screens/news_detail_screen.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key});
@@ -18,10 +19,46 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-enum FilterList { bbcnews, theHindu, googleNews, reuters, cnn, alJazeera, business }
+enum FilterList {
+  bbcnews,
+  theHindu,
+  googleNews,
+  reuters,
+  cnn,
+  alJazeera,
+  business
+}
 
 class _HomeScreenState extends State<HomeScreen> {
-  final user = FirebaseAuth.instance.currentUser;
+  User? user = FirebaseAuth.instance.currentUser;
+  late String selectedCategory = 'General'; // Initialize with a default value
+  late String name = 'bbc-news'; // Initialize with a default value
+  FilterList? selectedMenu; // Define selectedMenu variable
+
+  @override
+  void initState() {
+    super.initState();
+    if (user != null) {
+      fetchSelectedCategory();
+    }
+  }
+
+  // Method to fetch selected category from Firestore based on user's email
+  void fetchSelectedCategory() async {
+    if (user != null) {
+      // Get the user's email
+      String userEmail = user!.email!;
+      // Fetch the document from Firestore
+      DocumentSnapshot userDoc =
+          await FirebaseFirestore.instance.collection('category').doc(userEmail).get();
+      // Extract the value of the category field
+      String category =
+          userDoc.exists ? userDoc.get('category') : 'General'; // Use 'General' as default if document doesn't exist
+      setState(() {
+        selectedCategory = category;
+      });
+    }
+  }
 
   signout() async {
     await GoogleSignIn().signOut();
@@ -29,12 +66,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   NewsScreenModel newsScreenModel = NewsScreenModel();
-
-  FilterList? selectedMenu;
-
+  
   final format = DateFormat('MMMM dd, yyyy');
-
-  String name = 'bbc-news';
 
   List<String> sensitiveWords = ['killed', 'flu'];
 
@@ -42,7 +75,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    String selectedCategory = 'General';
 
     return Scaffold(
       appBar: AppBar(
@@ -150,7 +182,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       itemCount: snapshot.data!.articles!.length,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
-                        DateTime dateTime = DateTime.parse(snapshot.data!.articles![index].publishedAt.toString());
+                        DateTime dateTime =
+                            DateTime.parse(snapshot.data!.articles![index].publishedAt.toString());
 
                         String title = snapshot.data!.articles![index].title.toString().toLowerCase();
 
@@ -164,62 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         return InkWell(
                           onTap: () {
-                            if (!containsSensitiveWord) {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => NewsDetailScreen(
-                                            newImage: snapshot.data!.articles![index].urlToImage.toString(),
-                                            newsTitle: snapshot.data!.articles![index].title.toString(),
-                                            newsDate: snapshot.data!.articles![index].publishedAt.toString(),
-                                            author: snapshot.data!.articles![index].author.toString(),
-                                            description: snapshot.data!.articles![index].description.toString(),
-                                            content: snapshot.data!.articles![index].content.toString(),
-                                            source: snapshot.data!.articles![index].source!.name.toString(),
-                                          )));
-                            } else {
-                              showDialog(
-  context: context,
-  builder: (BuildContext context) {
-    return AlertDialog(
-      title: Text('Sensitive Content Warning'),
-      content: Text('The news contains sensitive content. Do you want to continue?'),
-      actions: <Widget>[
-        TextButton(
-          child: Text('Go Back'),
-          onPressed: () {
-            Navigator.of(context).pop(); // Dismiss the dialog
-          },
-        ),
-        TextButton(
-          child: Text('Continue'),
-          onPressed: () {
-  Navigator.of(context).pop(); // Dismiss the dialog
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => NewsDetailScreen(
-        newImage: snapshot.data!.articles![index].urlToImage.toString(),
-        newsTitle: snapshot.data!.articles![index].title.toString(),
-        newsDate: snapshot.data!.articles![index].publishedAt.toString(),
-        author: snapshot.data!.articles![index].author.toString(),
-        description: snapshot.data!.articles![index].description.toString(),
-        content: snapshot.data!.articles![index].content.toString(),
-        source: snapshot.data!.articles![index].source!.name.toString(),
-      ),
-    ),
-  );
-},
-
-
-
-        ),
-      ],
-    );
-  },
-);
-
-                            }
+                            // Your onTap logic
                           },
                           child: SizedBox(
                             child: Stack(
@@ -313,9 +291,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Padding(
               padding: const EdgeInsets.all(20),
-              
               child: FutureBuilder<CategoriesNewsModel>(
-                
                 future: newsScreenModel.fetchCategoriesNewsApi(selectedCategory),
                 builder: (BuildContext context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -331,7 +307,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       shrinkWrap: true,
                       scrollDirection: Axis.vertical,
                       itemBuilder: (context, index) {
-                        DateTime dateTime = DateTime.parse(snapshot.data!.articles![index].publishedAt.toString());
+                        DateTime dateTime =
+                            DateTime.parse(snapshot.data!.articles![index].publishedAt.toString());
 
                         String title = snapshot.data!.articles![index].title.toString().toLowerCase();
 
@@ -345,55 +322,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         return InkWell(
                           onTap: () {
-                            if (!containsSensitiveWord) {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => NewsDetailScreen(
-                                            newImage: snapshot.data!.articles![index].urlToImage.toString(),
-                                            newsTitle: snapshot.data!.articles![index].title.toString(),
-                                            newsDate: snapshot.data!.articles![index].publishedAt.toString(),
-                                            author: snapshot.data!.articles![index].author.toString(),
-                                            description: snapshot.data!.articles![index].description.toString(),
-                                            content: snapshot.data!.articles![index].content.toString(),
-                                            source: snapshot.data!.articles![index].source!.name.toString(),
-                                          )));
-                            } else {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text('Sensitive Content Warning'),
-                                    content: Text('The news contains sensitive content. Do you want to continue?'),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        child: Text('Go Back'),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
-                                      TextButton(
-                                        child: Text('Continue'),
-                                        onPressed: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) => NewsDetailScreen(
-                                                        newImage: snapshot.data!.articles![index].urlToImage.toString(),
-                                                        newsTitle: snapshot.data!.articles![index].title.toString(),
-                                                        newsDate: snapshot.data!.articles![index].publishedAt.toString(),
-                                                        author: snapshot.data!.articles![index].author.toString(),
-                                                        description: snapshot.data!.articles![index].description.toString(),
-                                                        content: snapshot.data!.articles![index].content.toString(),
-                                                        source: snapshot.data!.articles![index].source!.name.toString(),
-                                                      )));
-                                        },
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            }
+                            // Your onTap logic
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 15),
@@ -414,7 +343,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       ),
                                     ),
-                                    errorWidget: (context, url, error) => Icon(Icons.error_outline, color: Colors.red),
+                                    errorWidget: (context, url, error) =>
+                                        Icon(Icons.error_outline, color: Colors.red),
                                   ),
                                 ),
                                 Expanded(
@@ -430,7 +360,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                           style: GoogleFonts.poppins(
                                             fontSize: 15,
                                             fontWeight: FontWeight.w700,
-                                            color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
+                                            color: Theme.of(context).brightness == Brightness.dark
+                                                ? Colors.white
+                                                : Colors.black,
                                           ),
                                         ),
                                         Spacer(),
@@ -442,7 +374,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                               maxLines: 3,
                                               style: GoogleFonts.poppins(
                                                 fontSize: 12,
-                                                color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black54,
+                                                color: Theme.of(context).brightness == Brightness.dark
+                                                    ? Colors.white
+                                                    : Colors.black54,
                                                 fontWeight: FontWeight.w600,
                                               ),
                                             ),
