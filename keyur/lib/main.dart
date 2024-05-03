@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
     final ThemeController themeController = Get.put(ThemeController());
 
     return Obx(() => GetMaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter one',
       theme: themeController.isDarkTheme.value ? ThemeData.dark() : ThemeData.light(),
       home: const SplashScreen(),
     ));
