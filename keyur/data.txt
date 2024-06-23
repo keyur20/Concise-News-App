@@ -18,7 +18,7 @@ https://newsapi.org/v2/top-headlines/sources?from=2024-04-16&to=2024-04-16&sortB
 
 
 dependencies used 
-1) http - to handle the requests of API
+1) http - to handle the requests of APII
 2) Cache_network_storage - to avoid the loading time of images
 
 
