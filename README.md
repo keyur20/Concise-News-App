@@ -32,7 +32,7 @@
 ```
 
 ## Demo
-![Dailyinsight (4)](https://github.com/user-attachments/assets/e26d374d-01d2-489e-a137-130e71984f26)
+![Alt text](https://github.com/keyur20/Concise-News-App/blob/main/keyur/Dailyinsight.gif)
 
 
 
