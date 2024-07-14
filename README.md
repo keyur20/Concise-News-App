@@ -13,3 +13,20 @@
 - **Filter and Sorting Options**: The news app allows users for filtering news sources such as BBC news, Reuters,Google-News etc.
 
 - **Discussion Forum**: The news app have discussion forum which encourages user engagement with other readers on particular news.
+
+
+## Installation
+
+1. Clone the Repo
+
+```bash
+ https://github.com/keyur20/Concise-News-App.git
+```
+2. Change your working directory.
+```bash
+ cd keyur
+```
+3. Install all flutter dependencies in root directory
+```bash
+ flutter pub get 
+```
